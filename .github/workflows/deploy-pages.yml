@@ -15,22 +15,78 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ------------------------------------------------------
+      # Repository
+      # ------------------------------------------------------
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
+
+      # ------------------------------------------------------
+      # R
+      # ------------------------------------------------------
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - name: Install shinylive
+
+      # ------------------------------------------------------
+      # R packages required to build/export the dashboard
+      # ------------------------------------------------------
+
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::shinylive
+            any::shiny
+            any::dplyr
+            any::ggplot2
+
+
+      # ------------------------------------------------------
+      # Check installation
+      # ------------------------------------------------------
+
+      - name: Check R packages
         shell: Rscript {0}
         run: |
-          install.packages("shinylive", repos = "https://cloud.r-project.org")
+          pkgs <- c(
+            "shinylive",
+            "shiny",
+            "dplyr",
+            "ggplot2"
+          )
+
+          for (pkg in pkgs) {
+
+            if (!requireNamespace(pkg, quietly = TRUE)) {
+              stop(
+                paste("Package not installed:", pkg)
+              )
+            }
+
+          }
+
+          cat(
+            "shinylive version:",
+            as.character(packageVersion("shinylive")),
+            "\n"
+          )
+
+
+      # ------------------------------------------------------
+      # Check PETEJ results
+      # ------------------------------------------------------
 
       - name: Check dashboard data
         shell: bash
@@ -38,32 +94,51 @@ jobs:
           test -f app/data/report.csv || \
             (echo "ERROR: app/data/report.csv is missing" && exit 1)
 
+
+      # ------------------------------------------------------
+      # Export Shinylive
+      # ------------------------------------------------------
+
       - name: Export Shinylive site
         shell: Rscript {0}
         run: |
+
           shinylive::export(
             appdir = "app",
             destdir = "site",
             wasm_packages = TRUE,
-            template_params = list(title = "FGV-PETEJ-SC")
+            template_params = list(
+              title = "FGV-PETEJ-SC"
+            )
           )
+
+
+      # ------------------------------------------------------
+      # GitHub Pages
+      # ------------------------------------------------------
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
+
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
+
   deploy:
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
+
     needs: build
 
     steps:
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
