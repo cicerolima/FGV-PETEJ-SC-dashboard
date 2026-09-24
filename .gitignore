@@ -1,0 +1,17 @@
+# Local model files
+report_shiny.gdx
+*.gdx
+*.lst
+*.log
+
+# Locally exported static site
+site/
+
+# R project/session files
+.Rhistory
+.RData
+.Rproj.user/
+
+# OS
+.DS_Store
+Thumbs.db
