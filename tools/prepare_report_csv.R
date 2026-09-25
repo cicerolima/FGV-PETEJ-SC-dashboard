@@ -22,7 +22,7 @@ library(dplyr)
 
 # By default, place report_shiny.gdx in the repository root.
 gdx_file <- "report_shiny.gdx"
-out_file <- file.path("app", "data", "report.csv")
+out_file <- file.path("..","app", "data", "report.csv")
 
 if (!file.exists(gdx_file)) {
   stop(
