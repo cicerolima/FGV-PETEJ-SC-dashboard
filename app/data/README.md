@@ -1,1 +1,2 @@
-Place the generated report.csv in this directory.
+O arquivo report.csv deve estar nesse diretório.
+
