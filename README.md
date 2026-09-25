@@ -1,7 +1,9 @@
 # FGV-PETEJ-SC Dashboard
 
 Desenvolvido por Cicero Lima
+
 Autores: Cicero Zanetti de Lima, Angelo Costa Gurgel
+
 E-mail: cicero.lima@fgv.br  /  czlima@gmail.com
 
 Dashboard para visualização dos resultados do modelo FGV-PETEJ-SC. 
