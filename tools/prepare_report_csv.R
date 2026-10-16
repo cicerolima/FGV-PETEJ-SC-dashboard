@@ -322,6 +322,7 @@ report_tidy <- report %>%
       "OUTPUT_VALUE" = "Valor da produção",
       "CPI"          = "Inflação",
       "GDP_DEFLATOR" = "Deflator do PIB",
+      "GDP"          = "PIB",
       "VA"           = "Valor adicionado",
       "EMPREGO"      = "Emprego",
       "EMPREGO_RISK" = "Empregos mapeados",

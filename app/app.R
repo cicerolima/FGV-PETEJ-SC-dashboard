@@ -1172,36 +1172,36 @@ server <- function(input, output, session) {
       theme(
         
         axis.text.x = element_text(
-          size = 12
+          size = 16
         ),
         
         axis.text.y = element_text(
-          size = 12
+          size = 16
         ),
         
         axis.title.x = element_text(
-          size = 14
+          size = 18
         ),
         
         axis.title.y = element_text(
-          size = 14
+          size = 18
         ),
         
         plot.title = element_text(
-          size = 17,
+          size = 21,
           face = "bold"
         ),
         
         plot.subtitle = element_text(
-          size = 13
+          size = 17
         ),
         
         legend.title = element_text(
-          size = 12
+          size = 16
         ),
         
         legend.text = element_text(
-          size = 11
+          size = 15
         )
         
       )
