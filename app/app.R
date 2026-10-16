@@ -55,7 +55,7 @@ report_tidy <- read.csv(
   )
 
 required_cols <- c(
-  "indicador", "cenario", "item", "regiao",
+  "indicador", "indicador_label", "cenario", "item", "regiao",
   "familia", "ano", "medida", "valor"
 )
 
@@ -69,6 +69,39 @@ if (length(missing_cols) > 0) {
     )
   )
 }
+
+
+# ========================================================
+# Indicator labels
+# ========================================================
+
+# Keep the GAMS indicator code as the internal value used by
+# filters and calculations, but show indicador_label to users.
+
+indicador_lookup <- report_tidy %>%
+  distinct(
+    indicador,
+    indicador_label
+  ) %>%
+  arrange(
+    indicador_label
+  )
+
+# Named vector used by selectInput:
+# names  = labels shown to the user
+# values = internal GAMS indicator codes
+indicador_choices <- setNames(
+  indicador_lookup$indicador,
+  indicador_lookup$indicador_label
+)
+
+# Named vector used in plot titles:
+# names  = internal GAMS indicator codes
+# values = labels shown to the user
+indicador_label_map <- setNames(
+  indicador_lookup$indicador_label,
+  indicador_lookup$indicador
+)
 
 
 # ========================================================
@@ -302,18 +335,14 @@ server <- function(input, output, session) {
   # ======================================================
   
   observe({
-    
-    indicadores <- sort(
-      unique(report_tidy$indicador)
-    )
-    
+
     updateSelectInput(
       session,
       "indicador",
-      choices  = indicadores,
-      selected = indicadores[1]
+      choices  = indicador_choices,
+      selected = unname(indicador_choices[1])
     )
-    
+
   })
   
   
@@ -1137,7 +1166,7 @@ server <- function(input, output, session) {
       labs(
         
         title = paste(
-          input$indicador,
+          indicador_label_map[[input$indicador]],
           "-",
           rotulo_exibicao()
         ),
