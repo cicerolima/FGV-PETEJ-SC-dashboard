@@ -75,32 +75,20 @@ if (length(missing_cols) > 0) {
 # Indicator labels
 # ========================================================
 
-# Keep the GAMS indicator code as the internal value used by
-# filters and calculations, but show indicador_label to users.
-
-indicador_lookup <- report_tidy %>%
+indicador_map <- report_tidy %>%
   distinct(
     indicador,
     indicador_label
-  ) %>%
-  arrange(
-    indicador_label
   )
 
-# Named vector used by selectInput:
-# names  = labels shown to the user
-# values = internal GAMS indicator codes
-indicador_choices <- setNames(
-  indicador_lookup$indicador,
-  indicador_lookup$indicador_label
+indicador_label_map <- setNames(
+  indicador_map$indicador_label,
+  indicador_map$indicador
 )
 
-# Named vector used in plot titles:
-# names  = internal GAMS indicator codes
-# values = labels shown to the user
-indicador_label_map <- setNames(
-  indicador_lookup$indicador_label,
-  indicador_lookup$indicador
+indicador_choices <- setNames(
+  indicador_map$indicador,
+  indicador_map$indicador_label
 )
 
 
@@ -1179,7 +1167,6 @@ server <- function(input, output, session) {
         color    = "Série",
         linetype = "Cenário",
         shape    = "Cenário"
-        
       ) +
       
       theme(

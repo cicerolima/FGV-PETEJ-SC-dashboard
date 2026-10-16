@@ -236,6 +236,9 @@ indicator_labels <- c(
   "GDP_DEFLATOR" =
     "Deflator do PIB",
   
+  "GDP" =
+    "PIB",
+  
   "VA" =
     "Valor adicionado",
   
